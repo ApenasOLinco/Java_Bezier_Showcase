@@ -54,16 +54,16 @@ public class Main {
             public void paintComponent(Graphics g) {
                 g.setColor(Color.BLACK);
 
-                Point anchor1 = new Point(10, 10);
+                Point anchor1 = new Point(300, 400);
 
                 Point mousePosition = getMousePosition();
                 if (mousePosition == null) mousePosition = new Point(0, 0);
 
                 Point control = new Point(mousePosition.x, mousePosition.y);
 
-                Point anchor2 = new Point(10, 590);
+                Point anchor2 = new Point(400, 400);
 
-                Point[] points = Bezier.quadratic(anchor1, control, anchor2, 30);
+                Point[] points = Bezier.quadratic(anchor1, control, anchor2, 6);
 
                 g.setColor(Color.BLACK);
                 for (int i = 0; i < points.length - 1; i++) {
