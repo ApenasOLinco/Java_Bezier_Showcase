@@ -28,7 +28,7 @@ public class Main {
         }
 
         Graphics2D g = (Graphics2D) bs.getDrawGraphics();
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         paint(g);
         bs.show();
         g.dispose();
@@ -63,7 +63,7 @@ public class Main {
 
                 Point anchor2 = new Point(400, 400);
 
-                Point[] points = Bezier.quadratic(anchor1, control, anchor2, 6);
+                Point[] points = Bezier.quadratic(anchor1, control, anchor2, 20);
 
                 g.setColor(Color.BLACK);
                 for (int i = 0; i < points.length - 1; i++) {

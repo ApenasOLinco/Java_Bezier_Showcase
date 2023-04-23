@@ -17,15 +17,18 @@ import java.awt.*;
 public class Bezier {
 
     /**
-     * Returns a point array representing the points of a Quadratic Bézier curve, with the given control points.
-     * The quadratic Bézier curve uses two anchor points and one control point.
+     * Returns a point array representing the points of a Quadratic Bézier curve with the given control points.
+     * The "roundness" of the curve is specified by the {@code stops} parameter, which determines the number of points
+     * in the resulting curve. <br>
+     * <br>
+     * A quadratic Bézier curve uses two anchor points and one control point.
      * <p>
      * As specified in the <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">Wikipedia article on Bézier curves</a>,
      * the formula for the quadratic Bézier is: <br>
      * <br>
      * {@code B(t) = (1-t)^2 * P0 + 2(1-t) * t * P1 + t^2 * P2}, where:
      *
-     * <ul>
+     *  <ul>
      *     <li>{@code t} is the parameter, ranging from 0 to 1;</li>
      *     <li>{@code P0} is the first anchor point;</li>
      *     <li>{@code P1} is the control point;</li>
@@ -44,17 +47,14 @@ public class Bezier {
     }
 
     /**
-     * <p>
-     * Returns a {@link Point} array representing the points of a Bézier curve, with the given control points and with the given
-     * number of elements (defined by the number of {@code stops}).
-     * </p>
-     *
-     * For
+     * Returns a {@link Point} array representing the points of a {@code Quadratic Bézier curve} with the given control points and with the given
+     * number of elements (defined by the number of {@code stops}). <br>
+     * For details on the mathematical formula, see {@link #quadratic(Point, Point, Point, int) the overloaded method}.
      *
      * @param points The control points of the Bézier curve.
      * @param stops  The number of elements of the Bézier curve.
-     * @return The points of the Bézier curve.
-     * @see #quadratic(Point, Point, Point, int)
+     * @return The points of a Bézier curve, based on the given control points and with the given number of points.
+     * @see #quadratic(Point, Point, Point, int) for details on the mathematical formula.
      */
     public static Point[] quadratic(Point[] points, int stops) {
         if (points.length != 3) {
