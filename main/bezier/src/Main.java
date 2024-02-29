@@ -1,12 +1,22 @@
 package bezier.src;
 
+import bezier.src.ui.MainWindow;
+import bezier.src.ui.SettingsWindow;
+import bezier.src.ui.WindowManager;
+import com.formdev.flatlaf.FlatDarculaLaf;
+
 import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 
 public class Main {
 
-    private static JFrame window;
+    private MainWindow mainWindow;
+
+    private SettingsWindow settingsWindow;
 
     public static void main(String[] args) {
         Thread thread = new Thread(() -> new Main().start());
@@ -14,76 +24,60 @@ public class Main {
     }
 
     private void start() {
+//        FlatDarculaLaf.setup();
+        try {
+            UIManager.setLookAndFeel(new NimbusLookAndFeel());
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
+        }
+
         setupWindow();
 
         while (true) loop();
     }
 
     private void loop() {
-        BufferStrategy bs = window.getBufferStrategy();
+        final BufferStrategy[] bufferStrategies = ensureBufferStrategy();
+        if (bufferStrategies == null) return;
 
-        if (bs == null) {
-            window.createBufferStrategy(3);
-            return;
-        }
+        Graphics graphics = bufferStrategies[0].getDrawGraphics();
 
-        Graphics2D g = (Graphics2D) bs.getDrawGraphics();
-//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        paint(g);
-        bs.show();
-        g.dispose();
+        mainWindow.paint(graphics);
+        graphics.dispose();
+        bufferStrategies[0].show();
+
+        graphics = bufferStrategies[1].getDrawGraphics();
+
+        settingsWindow.paint(graphics);
+        graphics.dispose();
+        bufferStrategies[1].show();
     }
 
-    private void paint(Graphics2D g) {
-        window.paint(g);
+    private BufferStrategy[] ensureBufferStrategy() {
+        BufferStrategy mainWindowBufferStrategy = mainWindow.getBufferStrategy();
+        BufferStrategy settingsWindowBufferStrategy = settingsWindow.getBufferStrategy();
+
+        if (mainWindowBufferStrategy == null || settingsWindowBufferStrategy == null) {
+            mainWindow.createBufferStrategy(3);
+            settingsWindow.createBufferStrategy(3);
+            return null;
+        }
+
+        return new BufferStrategy[] {mainWindowBufferStrategy, settingsWindowBufferStrategy};
     }
 
     private void setupWindow() {
-        window = new JFrame("Bezier Curve");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.add(createCanvas());
-        window.pack();
-        window.setLocationRelativeTo(null);
-        window.setResizable(false);
-        window.setVisible(true);
+        mainWindow = new MainWindow(this);
+        settingsWindow = new SettingsWindow(this);
+        WindowManager.openWindow(mainWindow);
     }
 
-    private JPanel createCanvas() {
-        JPanel canvas = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                g.setColor(Color.BLACK);
-
-                Point anchor1 = new Point(300, 400);
-
-                Point mousePosition = getMousePosition();
-                if (mousePosition == null) mousePosition = new Point(0, 0);
-
-                Point control = new Point(mousePosition.x, mousePosition.y);
-
-                Point anchor2 = new Point(400, 400);
-
-                Point[] points = Bezier.quadratic(anchor1, control, anchor2, 20);
-
-                g.setColor(Color.BLACK);
-                for (int i = 0; i < points.length - 1; i++) {
-                    g.drawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
-                }
-
-                g.setColor(Color.RED);
-                g.fillOval(anchor1.x - 5, anchor1.y - 5, 10, 10);
-                g.fillOval(control.x - 5, control.y - 5, 10, 10);
-                g.fillOval(anchor2.x - 5, anchor2.y - 5, 10, 10);
-
-            }
-        };
-
-        final Dimension size = new Dimension(800, 600);
-
-        canvas.setPreferredSize(size);
-        canvas.setMinimumSize(size);
-        canvas.setMaximumSize(size);
-
-        return canvas;
+    public MainWindow getMainWindow() {
+        return mainWindow;
     }
+
+    public SettingsWindow getSettingsWindow() {
+        return settingsWindow;
+    }
+
 }

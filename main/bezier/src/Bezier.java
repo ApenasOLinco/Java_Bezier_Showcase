@@ -12,7 +12,7 @@ import java.awt.*;
  * </p>
  * <ul>
  *     <li>{@link #quadratic(Point, Point, Point, int)}
- *     </ul>
+ * </ul>
  */
 public class Bezier {
 
@@ -43,7 +43,7 @@ public class Bezier {
      * @return The point array of this {@code Bézier} curve.
      */
     public static Point[] quadratic(Point anchor1, Point control, Point anchor2, int stops) {
-        return quadratic(new Point[]{anchor1, control, anchor2}, stops == 0 ? 20 : stops);
+        return quadratic(new Point[]{anchor1, control, anchor2}, stops == 0 ? 2 : stops);
     }
 
     /**
@@ -81,6 +81,11 @@ public class Bezier {
 
         return result;
     }
+
+    public static Point[] cubic(Point anchor1, Point control1, Point control2, Point anchor2, int stops) {
+        return new Point[]{anchor1, control1, control2, anchor2};
+    }
+
 
 }
 
