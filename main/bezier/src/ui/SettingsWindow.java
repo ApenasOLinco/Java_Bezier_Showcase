@@ -5,19 +5,14 @@ import bezier.src.Main;
 import javax.swing.*;
 import javax.swing.SpinnerNumberModel;
 import java.awt.*;
-import java.awt.Font;
-import java.text.ParseException;
-import java.util.Arrays;
 
 public class SettingsWindow extends JFrame {
 
-    private final Main main;
     private JSpinner numberOfControlPoints;
     private JPanel buttonsPanel, settingsPanel;
 
     public SettingsWindow(Main main) {
         super("Settings");
-        this.main = main;
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setResizable(false);
         setPanels();

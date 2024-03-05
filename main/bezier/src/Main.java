@@ -24,16 +24,16 @@ public class Main {
     }
 
     private void start() {
-//        FlatDarculaLaf.setup();
-        try {
-            UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        } catch (UnsupportedLookAndFeelException e) {
-            throw new RuntimeException(e);
-        }
+        FlatDarculaLaf.setup();
+//        try {
+//            UIManager.setLookAndFeel(new NimbusLookAndFeel());
+//        } catch (UnsupportedLookAndFeelException e) {
+//            throw new RuntimeException(e);
+//        }
 
         setupWindow();
 
-        while (true) loop();
+//        while (true) loop();
     }
 
     private void loop() {

@@ -3,7 +3,6 @@ package bezier.src.ui;
 import bezier.src.Main;
 
 import javax.swing.*;
-import javax.swing.SpinnerNumberModel;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
@@ -46,20 +45,6 @@ public class MainWindow extends JFrame {
         };
 
         final Dimension size = new Dimension(800, 600);
-
-        JSpinner testSpinner = new JSpinner();
-        testSpinner.setPreferredSize(new Dimension(50, 20));
-
-        JButton testButton = new JButton("Test");
-        testButton.setPreferredSize(new Dimension(200, 50));
-        JTextField testTextField = new JTextField();
-        testTextField.setPreferredSize(new Dimension(200, 50));
-        testTextField.setText("Test");
-
-        panel.add(testSpinner);
-        panel.add(testButton);
-        panel.add(testTextField);
-
         panel.setPreferredSize(size);
         panel.setMinimumSize(size);
         panel.setMaximumSize(size);
