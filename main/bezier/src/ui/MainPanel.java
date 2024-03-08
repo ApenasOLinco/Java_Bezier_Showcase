@@ -9,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -133,10 +132,6 @@ public class MainPanel extends JPanel {
 
                 Stream<Point> eligible = controlPoints.stream().filter(point -> point.distance(e.getPoint()) <= (float) scaledControlPointSize / 2.0);
                 selectedControlPoint = (ControlPoint) eligible.findFirst().orElse(null);
-
-                if (selectedControlPoint != null) {
-                    selectedControlPoint.setSelected(true);
-                }
             }
 
             @Override
@@ -186,10 +181,6 @@ public class MainPanel extends JPanel {
         int newY = Math.max(0, Math.min(point.y, getHeight()));
 
         return new Point(newX, newY);
-    }
-
-    public float getScale() {
-        return scale;
     }
 
     public void setScale(float scale) {

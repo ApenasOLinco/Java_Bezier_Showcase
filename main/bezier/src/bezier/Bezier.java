@@ -65,6 +65,7 @@ public class Bezier {
      * For details on the mathematical formula, see {@link #linear(Point[], int) the overloaded method}.
      * </p>
      */
+    @SuppressWarnings("unused")
     public static Point[] linear(Point anchor1, Point anchor2, int stops) {
         return linear(new Point[]{anchor1, anchor2}, stops);
     }
@@ -131,6 +132,7 @@ public class Bezier {
      * @return the points of a Bézier curve, based on the given control points and with the given number of stops.
      * @see #quadratic(Point, Point, Point, int) for details on the mathematical formula.
      */
+    @SuppressWarnings("unused")
     public static Point[] quadratic(Point anchor1, Point control, Point anchor2, int stops) {
         return quadratic(new Point[]{anchor1, control, anchor2}, stops == 0 ? 2 : stops);
     }
@@ -199,6 +201,7 @@ public class Bezier {
      * @param stops    the number of stops in the curve.
      * @return the points of a Bézier curve, based on the given control points and with the given number of stops.
      */
+    @SuppressWarnings("unused")
     public static Point[] cubic(Point anchor1, Point control1, Point control2, Point anchor2, int stops) {
         return cubic(new Point[]{anchor1, control1, control2, anchor2}, stops == 0 ? 2 : stops);
     }
