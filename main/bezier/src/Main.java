@@ -4,6 +4,10 @@ import bezier.src.ui.MainWindow;
 import bezier.src.ui.SettingsWindow;
 import bezier.src.ui.WindowManager;
 import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -24,46 +28,9 @@ public class Main {
     }
 
     private void start() {
-        FlatDarculaLaf.setup();
-//        try {
-//            UIManager.setLookAndFeel(new NimbusLookAndFeel());
-//        } catch (UnsupportedLookAndFeelException e) {
-//            throw new RuntimeException(e);
-//        }
+        FlatDarkLaf.setup();
 
         setupWindow();
-
-//        while (true) loop();
-    }
-
-    private void loop() {
-        final BufferStrategy[] bufferStrategies = ensureBufferStrategy();
-        if (bufferStrategies == null) return;
-
-        Graphics graphics = bufferStrategies[0].getDrawGraphics();
-
-        mainWindow.paint(graphics);
-        graphics.dispose();
-        bufferStrategies[0].show();
-
-        graphics = bufferStrategies[1].getDrawGraphics();
-
-        settingsWindow.paint(graphics);
-        graphics.dispose();
-        bufferStrategies[1].show();
-    }
-
-    private BufferStrategy[] ensureBufferStrategy() {
-        BufferStrategy mainWindowBufferStrategy = mainWindow.getBufferStrategy();
-        BufferStrategy settingsWindowBufferStrategy = settingsWindow.getBufferStrategy();
-
-        if (mainWindowBufferStrategy == null || settingsWindowBufferStrategy == null) {
-            mainWindow.createBufferStrategy(3);
-            settingsWindow.createBufferStrategy(3);
-            return null;
-        }
-
-        return new BufferStrategy[] {mainWindowBufferStrategy, settingsWindowBufferStrategy};
     }
 
     private void setupWindow() {

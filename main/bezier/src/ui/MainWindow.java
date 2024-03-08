@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
     private final Main main;
-    private JPanel panel;
+    private MainPanel panel;
 
     public MainWindow(Main main) {
         super("Bézier Curves");
@@ -18,6 +18,7 @@ public class MainWindow extends JFrame {
         createCanvas();
         add(panel);
         pack();
+
         setLocationRelativeTo(null);
         setResizable(false);
     }
@@ -38,11 +39,7 @@ public class MainWindow extends JFrame {
     }
 
     private void createCanvas() {
-        panel = new JPanel() {
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-            }
-        };
+        panel = new MainPanel();
 
         final Dimension size = new Dimension(800, 600);
         panel.setPreferredSize(size);
