@@ -9,12 +9,14 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class MainPanel extends JPanel {
 
+    public int stops = 200;
     ArrayList<Point> controlPoints;
 
     ArrayList<Point> curvePoints;
@@ -39,10 +41,8 @@ public class MainPanel extends JPanel {
         controlPoints = new ArrayList<>();
         curvePoints = new ArrayList<>();
 
-        // Manual Stuff TODO remove later
         controlPoints.add(new ControlPoint(100, 100));
         controlPoints.add(new ControlPoint(200, 200));
-        controlPoints.add(new ControlPoint(300, 300));
 
         buildCurve();
 
@@ -81,6 +81,8 @@ public class MainPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        ((Graphics2D)getGraphics()).addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
+
         Color curvePointColor = Color.GREEN;
         g.setColor(curvePointColor);
 
@@ -105,9 +107,9 @@ public class MainPanel extends JPanel {
         }
 
         Point[] result = switch(points.length) {
-            case 2 -> Bezier.linear(points, 620);
-            case 3 -> Bezier.quadratic(points, 620);
-            case 4 -> Bezier.cubic(points, 620);
+            case 2 -> Bezier.linear(points, stops);
+            case 3 -> Bezier.quadratic(points, stops);
+            case 4 -> Bezier.cubic(points, stops);
             default -> null;
         };
 

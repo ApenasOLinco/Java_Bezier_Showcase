@@ -14,10 +14,6 @@ public class ControlPoint extends Point {
         super(p.x, p.y);
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
-
     public void setSelected(boolean selected) {
         this.selected = selected;
     }

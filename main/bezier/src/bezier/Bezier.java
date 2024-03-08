@@ -58,12 +58,12 @@ public class Bezier {
     }
 
     /**
-     * Returns a {@link Point}
-     *
-     * @param anchor1
-     * @param anchor2
-     * @param stops
-     * @return
+     * Returns a {@link Point} array representing the points of a Linear Bézier curve with the given control points.
+     * The more {@code stops} in the curve, the less "spotty" it will look, as the number of stops determines the amount
+     * of points in between the anchor points. A linear Bézier curve uses only two anchor points with no control points.
+     * <p>
+     * For details on the mathematical formula, see {@link #linear(Point[], int) the overloaded method}.
+     * </p>
      */
     public static Point[] linear(Point anchor1, Point anchor2, int stops) {
         return linear(new Point[]{anchor1, anchor2}, stops);
