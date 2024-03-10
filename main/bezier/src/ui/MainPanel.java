@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,7 +21,7 @@ public class MainPanel extends JPanel {
 
     ArrayList<Point> curvePoints;
 
-    ControlPoint selectedControlPoint;
+    Point selectedControlPoint;
 
     private float scale = 1.0f;
 
@@ -40,41 +41,14 @@ public class MainPanel extends JPanel {
         controlPoints = new ArrayList<>();
         curvePoints = new ArrayList<>();
 
-        controlPoints.add(new ControlPoint(100, 100));
-        controlPoints.add(new ControlPoint(200, 200));
+        controlPoints.add(new Point(100, 100));
+        controlPoints.add(new Point(200, 200));
 
         buildCurve();
 
         setMouseListeners();
 
         requestFocus();
-    }
-
-    private void initComponents() {
-        ButtonGroup addOrRemovePoints = new ButtonGroup();
-
-        JButton addPoint = new JButton("+");
-        JButton removePoint = new JButton("-");
-
-        addPoint.addActionListener(e -> {
-            final Point toAdd = clamp(new Point(controlPoints.getLast().x + 50, controlPoints.getLast().y));
-            controlPoints.add(new ControlPoint(toAdd));
-
-            if(controlPoints.size() >= 3) removePoint.setEnabled(true);
-            buildCurve();
-        });
-
-        removePoint.addActionListener(e -> {
-            controlPoints.removeLast();
-
-            if(controlPoints.size() < 3) removePoint.setEnabled(false);
-            buildCurve();
-        });
-
-        addOrRemovePoints.add(addPoint);
-        addOrRemovePoints.add(removePoint);
-        add(removePoint);
-        add(addPoint);
     }
 
     public void paintComponent(Graphics g) {
@@ -97,6 +71,35 @@ public class MainPanel extends JPanel {
         }
     }
 
+    private void initComponents() {
+        ButtonGroup addOrRemovePoints = new ButtonGroup();
+
+        JButton addPoint = new JButton("+");
+        JButton removePoint = new JButton("-");
+
+        addPoint.addActionListener(e -> {
+            Point[] elevated = new Point[controlPoints.size()];
+            elevated = Bezier.elevate(controlPoints.toArray(elevated));
+            controlPoints.clear();
+            controlPoints.addAll(Arrays.asList(elevated));
+
+            if(controlPoints.size() >= 3) removePoint.setEnabled(true);
+            buildCurve();
+        });
+
+        removePoint.addActionListener(e -> {
+            controlPoints.removeLast();
+
+            if(controlPoints.size() < 3) removePoint.setEnabled(false);
+            buildCurve();
+        });
+
+        addOrRemovePoints.add(addPoint);
+        addOrRemovePoints.add(removePoint);
+        add(removePoint);
+        add(addPoint);
+    }
+
     private void buildCurve() {
         Point[] points;
         points = new Point[controlPoints.size()];
@@ -113,7 +116,7 @@ public class MainPanel extends JPanel {
         };
 
         curvePoints.clear();
-        assert result != null;
+        assert result != null : "result is null";
         curvePoints.addAll(List.of(result));
         repaint();
     }
@@ -131,7 +134,7 @@ public class MainPanel extends JPanel {
                 if (e.getButton() != MouseEvent.BUTTON1) return;
 
                 Stream<Point> eligible = controlPoints.stream().filter(point -> point.distance(e.getPoint()) <= (float) scaledControlPointSize / 2.0);
-                selectedControlPoint = (ControlPoint) eligible.findFirst().orElse(null);
+                selectedControlPoint = eligible.findFirst().orElse(null);
             }
 
             @Override

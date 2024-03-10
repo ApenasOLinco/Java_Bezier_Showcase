@@ -130,7 +130,7 @@ public class Bezier {
      * @param anchor2 the second anchor point.
      * @param stops   the number of stops in the curve.
      * @return the points of a Bézier curve, based on the given control points and with the given number of stops.
-     * @see #quadratic(Point, Point, Point, int) for details on the mathematical formula.
+     * @see #quadratic(Point, Point, Point, int)
      */
     @SuppressWarnings("unused")
     public static Point[] quadratic(Point anchor1, Point control, Point anchor2, int stops) {
@@ -206,7 +206,32 @@ public class Bezier {
         return cubic(new Point[]{anchor1, control1, control2, anchor2}, stops == 0 ? 2 : stops);
     }
 
+    /**
+     * Elevates the degree of the Bézier curve with the given control points, which means adding a control point to it.
+     * The result is an identical curve in appearance, but one degree higher.
+     *
+     * @param controlPoints the control points of the Bézier curve to elevate
+     * @return an array of control points for a new Bézier curve which is identical in appearance, but one degree higher.
+     */
+    public static Point[] elevate(Point[] controlPoints) {
+        final int n = controlPoints.length - 1;
+        Point[] elevated = new Point[n + 2];
 
+        elevated[0] = controlPoints[0];
+        elevated[n + 1] = controlPoints[n];
+
+        for (int i = 1; i <= n; i++) {
+            final float fi = (float) i;
+            final float fn = (float) n;
+
+            int elevatedX = (int) ((fi / (fn + 1.0)) * (float) controlPoints[i - 1].x + (1.0 - fi / (fn + 1.0)) * (float) controlPoints[i].x);
+            int elevatedY = (int) ((fi / (fn + 1.0)) * (float) controlPoints[i - 1].y + (1.0 - fi / (fn + 1.0)) * (float) controlPoints[i].y);
+
+            elevated[i] = new Point(elevatedX, elevatedY);
+        }
+
+        return elevated;
+    }
 }
 
 
