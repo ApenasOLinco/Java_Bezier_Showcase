@@ -14,23 +14,56 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * This class is the main panel of the application.
+ * It is responsible for drawing the curve and the control points. <br>
+ * It also handles the mouse events and updates the curve and control points accordingly.
+ **/ 
 public class MainPanel extends JPanel {
 
+    /**
+     * The number of points on the curve.
+     */
     public int stops = 200;
+
+    /**
+     * The list containing all the control points.
+     */
     ArrayList<Point> controlPoints;
 
+    /**
+     * The list of points on the displayed curve.
+     */
     ArrayList<Point> curvePoints;
 
+    /**
+     * The index of the control point that is currently selected.
+     */
     Point selectedControlPoint;
 
+    /**
+     * The scale of the control points. The scale changes when the user zooms in or out. 
+     */
     private float scale = 1.0f;
 
+    /** 
+     * The size of the control points in pixels.
+     */
     private final int controlPointSize = 10;
 
+    /**
+     * The scaled size of the control points in pixels.
+     */
     int scaledControlPointSize = (int) ((float) controlPointSize * scale);
 
+    /**
+     * The size of the curve points in pixels.
+     */
     private final int curvePointSize = 3;
-
+    
+    /**
+     * The scaled size of the curve points in pixels.
+     */
     int scaledCurvePointSize = (int) ((float) curvePointSize * scale);
 
     public MainPanel() {
@@ -88,7 +121,7 @@ public class MainPanel extends JPanel {
         });
 
         removePoint.addActionListener(e -> {
-            controlPoints.removeLast();
+            controlPoints.remove(controlPointSize - 1);
 
             if(controlPoints.size() < 3) removePoint.setEnabled(false);
             buildCurve();
@@ -108,12 +141,7 @@ public class MainPanel extends JPanel {
             points[i] = controlPoints.get(i);
         }
 
-        Point[] result = switch(points.length) {
-            case 2 -> Bezier.linear(points, stops);
-            case 3 -> Bezier.quadratic(points, stops);
-            case 4 -> Bezier.cubic(points, stops);
-            default -> null;
-        };
+        Point[] result = Bezier.curve(points, stops);
 
         curvePoints.clear();
         assert result != null : "result is null";
