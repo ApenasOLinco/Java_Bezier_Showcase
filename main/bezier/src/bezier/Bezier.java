@@ -1,6 +1,7 @@
 package bezier.src.bezier;
 
-import java.awt.*;
+import java.awt.Point;
+import java.util.Arrays;
 
 /**
  * <p>
@@ -18,7 +19,7 @@ import java.awt.*;
  */
 public class Bezier {
 
-    /**
+    /**  
      * Returns a {@link Point} array representing the points of a Linear Bézier curve with the given control points.
      * The more {@code stops} in the curve, the less "spotty" it will look, as the number of stops determines the amount
      * of points in between the anchor points. A linear Bézier curve uses only two anchor points with no control points.
@@ -204,6 +205,56 @@ public class Bezier {
     @SuppressWarnings("unused")
     public static Point[] cubic(Point anchor1, Point control1, Point control2, Point anchor2, int stops) {
         return cubic(new Point[]{anchor1, control1, control2, anchor2}, stops == 0 ? 2 : stops);
+    }
+
+    public static Point[] curve(Point[] controlPoints, int stops) {
+        Point[] result = new Point[stops];
+
+        switch(controlPoints.length) {
+            case 2:
+                result = linear(controlPoints, stops);
+                break;
+            case 3:
+                result = quadratic(controlPoints, stops);
+                break;
+            case 4:
+                result = cubic(controlPoints, stops);
+                break;
+        }
+
+        for(int i = 0; i < stops; i++) {
+            double t = (double) i / (double) stops;
+            
+            result[i] = deCasteljau(t, controlPoints);
+        }
+
+        return result;
+    }
+
+    private static Point deCasteljau(double t, Point[] controlPoints) {
+        var copy = controlPoints.clone();
+
+        for(int i = 1; i < copy.length; i++) {
+            for(int j = 0; j < copy.length - i; j++) {
+                copy[j] = linear(t, copy[j], copy[j + 1]);
+            }
+        }
+
+        return copy[0];
+    }
+
+    private static Point linear(double t, Point c0, Point c1) {
+        double x0 = c0.getX();
+        double y0 = c0.getY();
+        double x1 = c1.getX();
+        double y1 = c1.getY();
+
+        double x = (1d - t) * x0 + t * x1;
+        double y = (1d - t) * y0 + t * y1;
+        int ix = Math.round((float) x);
+        int iy = Math.round((float) y);
+
+        return new Point(ix, iy);
     }
 
     /**
