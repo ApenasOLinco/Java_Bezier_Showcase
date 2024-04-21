@@ -24,7 +24,7 @@ public class MainPanel extends JPanel {
     /**
      * The number of points on the curve.
      */
-    public int stops = 200;
+    public int stops = 900;
 
     /**
      * The list containing all the control points.
@@ -47,24 +47,24 @@ public class MainPanel extends JPanel {
     private float scale = 1.0f;
 
     /** 
-     * The size of the control points in pixels.
+     * The radius of the control points in pixels.
      */
-    private final int controlPointSize = 10;
+    private final int controlPointRadius = 10;
 
     /**
-     * The scaled size of the control points in pixels.
+     * The scaled radius of the control points in pixels.
      */
-    int scaledControlPointSize = (int) ((float) controlPointSize * scale);
+    int scaledControlPointRadius = (int) ((float) controlPointRadius * scale);
 
     /**
-     * The size of the curve points in pixels.
+     * The radius of the curve points in pixels.
      */
-    private final int curvePointSize = 3;
+    private final int curvePointRadius = 3;
     
     /**
-     * The scaled size of the curve points in pixels.
+     * The scaled radius of the curve points in pixels.
      */
-    int scaledCurvePointSize = (int) ((float) curvePointSize * scale);
+    int scaledCurvePointRadius = (int) ((float) curvePointRadius * scale);
 
     public MainPanel() {
         super();
@@ -93,14 +93,14 @@ public class MainPanel extends JPanel {
         g.setColor(curvePointColor);
 
         for (Point p : curvePoints) {
-            g.fillOval(p.x - scaledCurvePointSize / 2, p.y - scaledCurvePointSize / 2, scaledCurvePointSize, scaledCurvePointSize);
+            g.fillOval(p.x - scaledCurvePointRadius / 2, p.y - scaledCurvePointRadius / 2, scaledCurvePointRadius, scaledCurvePointRadius);
         }
 
         Color controlPointColor = Color.RED;
         g.setColor(controlPointColor);
 
         for (Point p : controlPoints) {
-            g.fillOval(p.x - scaledControlPointSize / 2, p.y - scaledControlPointSize / 2, scaledControlPointSize, scaledControlPointSize);
+            g.fillOval(p.x - scaledControlPointRadius / 2, p.y - scaledControlPointRadius / 2, scaledControlPointRadius, scaledControlPointRadius);
         }
     }
 
@@ -121,7 +121,7 @@ public class MainPanel extends JPanel {
         });
 
         removePoint.addActionListener(e -> {
-            controlPoints.remove(controlPointSize - 1);
+            controlPoints.remove(controlPoints.size() - 1);
 
             if(controlPoints.size() < 3) removePoint.setEnabled(false);
             buildCurve();
@@ -161,7 +161,7 @@ public class MainPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() != MouseEvent.BUTTON1) return;
 
-                Stream<Point> eligible = controlPoints.stream().filter(point -> point.distance(e.getPoint()) <= (float) scaledControlPointSize / 2.0);
+                Stream<Point> eligible = controlPoints.stream().filter(point -> point.distance(e.getPoint()) <= (float) scaledControlPointRadius / 2.0);
                 selectedControlPoint = eligible.findFirst().orElse(null);
             }
 
@@ -217,7 +217,7 @@ public class MainPanel extends JPanel {
     public void setScale(float scale) {
         this.scale = scale;
 
-        scaledControlPointSize = (int) ((float) controlPointSize * scale);
-        scaledCurvePointSize = (int) ((float) curvePointSize * scale);
+        scaledControlPointRadius = (int) ((float) controlPointRadius * scale);
+        scaledCurvePointRadius = (int) ((float) curvePointRadius * scale);
     }
 }
